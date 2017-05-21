@@ -20,20 +20,20 @@ public class DbHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String builder = "CREATE TABLE " + Contract.RecipeContract.TABLE_NAME + " ("
-                + Contract.RecipeContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Contract.RecipeContract.COLUMN_RECIPE + " TEXT NOT NULL,"
-                + Contract.RecipeContract.COLUMN_RELATED_RECIPE + " TEXT NOT NULL" +
+        String builder = "CREATE TABLE " + Contract.IngredientContract.TABLE_NAME + " ("
+                + Contract.IngredientContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Contract.IngredientContract.COLUMN_QUANTITY + " TEXT NOT NULL,"
+                + Contract.IngredientContract.COLUMN_MEASURE + " TEXT NOT NULL,"
+                + Contract.IngredientContract.COLUMN_INGREDIENT + " TEXT NOT NULL" +
                 ");";
 
         db.execSQL(builder);
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL(" DROP TABLE IF EXISTS " + Contract.RecipeContract.TABLE_NAME);
+        db.execSQL(" DROP TABLE IF EXISTS " + Contract.IngredientContract.TABLE_NAME);
 
         onCreate(db);
     }

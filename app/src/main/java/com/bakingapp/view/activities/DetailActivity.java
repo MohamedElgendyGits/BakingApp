@@ -1,6 +1,7 @@
 package com.bakingapp.view.activities;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.bakingapp.R;
 import com.bakingapp.application.BakingApplication;
 import com.bakingapp.application.BakingConstants;
 import com.bakingapp.data.Contract;
+import com.bakingapp.data.SettingsSharedPref;
 import com.bakingapp.model.Ingredients;
 import com.bakingapp.model.Recipe;
 import com.bakingapp.model.Steps;
@@ -117,5 +119,57 @@ public class DetailActivity extends AppCompatActivity implements OnIngredientSel
         else {
             FragmentUtils.replaceFragment(this,recipeStepFragment,R.id.fragment_detail_container,true,"");
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+        return true;
+    }
+    //and this to handle actions
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add_ingredients) {
+
+            Toast.makeText(this, R.string.add_widget_message, Toast.LENGTH_SHORT).show();
+            addDataToWidget();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void addDataToWidget(){
+
+        getContentResolver().delete(Contract.IngredientContract.URI,null,null);
+
+        ArrayList<ContentValues> ingredientsCVs = new ArrayList<>();
+
+        String recipeJsonString = getIntent().getExtras().getString(BakingConstants.MAIN_DETAIL_INTENT_KEY);
+        Recipe mRecipe = JsonUtils.convertJsonStringToObject(recipeJsonString, Recipe.class);
+        ArrayList<Ingredients> ingredientsArrayList = mRecipe.getIngredients();
+
+        for(int i=0;i<ingredientsArrayList.size();i++){
+            ContentValues ingredientCV = new ContentValues();
+            ingredientCV.put(Contract.IngredientContract.COLUMN_QUANTITY, ingredientsArrayList.get(i).getQuantity());
+            ingredientCV.put(Contract.IngredientContract.COLUMN_MEASURE, ingredientsArrayList.get(i).getMeasure());
+            ingredientCV.put(Contract.IngredientContract.COLUMN_INGREDIENT, ingredientsArrayList.get(i).getIngredient());
+
+            ingredientsCVs.add(ingredientCV);
+        }
+
+        getContentResolver().bulkInsert(
+                Contract.IngredientContract.URI,
+                ingredientsCVs.toArray(new ContentValues[ingredientsCVs.size()]));
+
+        SettingsSharedPref.toggleDesiredRecipe(BakingApplication.getInstance(),true);
+
+        // update widget
+        Intent dataUpdatedIntent = new Intent(BakingConstants.ACTION_DATA_UPDATED);
+        sendBroadcast(dataUpdatedIntent);
+
     }
 }

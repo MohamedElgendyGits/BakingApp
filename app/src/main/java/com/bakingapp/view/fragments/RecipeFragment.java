@@ -85,9 +85,6 @@ public class RecipeFragment extends Fragment implements RecipeListAdapter.Recipe
 
 
                 hideProgressLoading();
-
-
-                addDataToWidget(recipeArrayList);
             }
 
             @Override
@@ -123,25 +120,5 @@ public class RecipeFragment extends Fragment implements RecipeListAdapter.Recipe
         String recipeJsonString = JsonUtils.convertObjectToJsonString(recipe,Recipe.class);
         detailActivity.putExtra(BakingConstants.MAIN_DETAIL_INTENT_KEY,recipeJsonString);
         startActivity(detailActivity);
-    }
-
-    private void addDataToWidget(ArrayList<Recipe> recipeArrayList){
-
-        getActivity().getContentResolver().delete(Contract.RecipeContract.URI,null,null);
-
-        ArrayList<ContentValues> ingredientsCVs = new ArrayList<>();
-
-        for(int i=0;i<recipeArrayList.size();i++){
-            ContentValues ingredientCV = new ContentValues();
-            ingredientCV.put(Contract.RecipeContract.COLUMN_RECIPE, recipeArrayList.get(i).getName());
-            String recipeJsonString = JsonUtils.convertObjectToJsonString(recipeArrayList.get(i),Recipe.class);
-            ingredientCV.put(Contract.RecipeContract.COLUMN_RELATED_RECIPE, recipeJsonString);
-
-            ingredientsCVs.add(ingredientCV);
-        }
-
-       getActivity().getContentResolver().bulkInsert(
-                Contract.RecipeContract.URI,
-                ingredientsCVs.toArray(new ContentValues[ingredientsCVs.size()]));
     }
 }

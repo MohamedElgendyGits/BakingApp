@@ -10,9 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bakingapp.R;
+import com.bakingapp.application.BakingApplication;
+import com.bakingapp.application.BakingConstants;
+import com.bakingapp.data.SettingsSharedPref;
 import com.bakingapp.view.activities.DetailActivity;
 import com.bakingapp.view.activities.MainActivity;
 
@@ -38,12 +42,21 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingMainIntent = PendingIntent.getActivity(context, 0, launchMain, 0);
         views.setOnClickPendingIntent(R.id.widget_toolbar, pendingMainIntent);
 
+
+        if(! SettingsSharedPref.getDesiredRecipe(BakingApplication.getInstance())) {
+            views.setViewVisibility(R.id.textView_widget_hint, View.VISIBLE);
+        }else{
+            views.setViewVisibility(R.id.textView_widget_hint, View.GONE);
+        }
+
+        /*
         // Open ingredients on List Item click
         Intent intentRecipeDetails = new Intent(context, DetailActivity.class);
         PendingIntent pendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(intentRecipeDetails)
                 .getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.baking_widget_listView,pendingIntent);
+        */
 
 
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.baking_widget_listView);
@@ -84,5 +97,18 @@ public class BakingWidgetProvider extends AppWidgetProvider {
     private static void setRemoteAdapterV11(Context context, @NonNull final RemoteViews views) {
         views.setRemoteAdapter(0, R.id.baking_widget_listView,
                 new Intent(context, BakingWidgetService.class));
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        // Receive Broadcast About Stock Data Update
+        if (intent.getAction().equals(BakingConstants.ACTION_DATA_UPDATED)){
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context,getClass()));
+            // update All Widgets
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,R.id.baking_widget_listView);
+        }
     }
 }

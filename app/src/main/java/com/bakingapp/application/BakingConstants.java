@@ -15,6 +15,7 @@ public class BakingConstants {
 
     //for widget
     public static final String INTENT_EXTRA_RECIPE_WIDGET = "recipe";
+    public static final String ACTION_DATA_UPDATED = "com.udacity.baking.ACTION_DATA_UPDATED";
 
 
 }

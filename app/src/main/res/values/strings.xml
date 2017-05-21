@@ -6,6 +6,7 @@
     <string name="steps_list">All Steps</string>
     <string name="recipe_ingredient">Recipe Ingredients</string>
     <string name="loading_message">Loading...</string>
+    <string name="add_widget_hint">You can add desired ingredients by clicking on add icon on the action bar</string>
     <string name="add_widget_message">Added To Widget !</string>
 
 </resources>

@@ -16,14 +16,14 @@ import android.support.annotation.Nullable;
 
 public class BakingProvider extends ContentProvider {
 
-    private static final int RECIPES = 100;
+    private static final int INGREDIENTS = 100;
     private static final UriMatcher uriMatcher = buildUriMatcher();
 
     private DbHelper dbHelper;
 
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        matcher.addURI(Contract.AUTHORITY, Contract.PATH_RECIPE, RECIPES);
+        matcher.addURI(Contract.AUTHORITY, Contract.PATH_INGREDIENT, INGREDIENTS);
         return matcher;
     }
 
@@ -41,9 +41,9 @@ public class BakingProvider extends ContentProvider {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         switch (uriMatcher.match(uri)) {
-            case RECIPES:
+            case INGREDIENTS:
                 returnCursor = db.query(
-                        Contract.RecipeContract.TABLE_NAME,
+                        Contract.IngredientContract.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -77,13 +77,13 @@ public class BakingProvider extends ContentProvider {
         Uri returnUri;
 
         switch (uriMatcher.match(uri)) {
-            case RECIPES:
+            case INGREDIENTS:
                 db.insert(
-                        Contract.RecipeContract.TABLE_NAME,
+                        Contract.IngredientContract.TABLE_NAME,
                         null,
                         values
                 );
-                returnUri = Contract.RecipeContract.URI;
+                returnUri = Contract.IngredientContract.URI;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown URI:" + uri);
@@ -106,9 +106,9 @@ public class BakingProvider extends ContentProvider {
             selection = "1";
         }
         switch (uriMatcher.match(uri)) {
-            case RECIPES:
+            case INGREDIENTS:
                 rowsDeleted = db.delete(
-                        Contract.RecipeContract.TABLE_NAME,
+                        Contract.IngredientContract.TABLE_NAME,
                         selection,
                         selectionArgs
                 );
@@ -139,13 +139,13 @@ public class BakingProvider extends ContentProvider {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         switch (uriMatcher.match(uri)) {
-            case RECIPES:
+            case INGREDIENTS:
                 db.beginTransaction();
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
                         db.insert(
-                                Contract.RecipeContract.TABLE_NAME,
+                                Contract.IngredientContract.TABLE_NAME,
                                 null,
                                 value
                         );

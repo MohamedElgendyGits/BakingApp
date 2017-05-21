@@ -28,6 +28,9 @@
         <receiver android:name=".widget.BakingWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+
+                <!-- receive notification from application to update widget -->
+                <action android:name="com.udacity.baking.ACTION_DATA_UPDATED" />
             </intent-filter>
 
             <meta-data

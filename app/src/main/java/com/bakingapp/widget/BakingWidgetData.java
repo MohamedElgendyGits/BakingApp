@@ -36,8 +36,8 @@ public class BakingWidgetData implements RemoteViewsService.RemoteViewsFactory {
         /**This is done because the widget runs as a separate thread
          when compared to the current app and hence the app's data won't be accessible to it */
 
-        cursor = context.getContentResolver().query(Contract.RecipeContract.URI,
-                Contract.RecipeContract.RECIPE_COLUMNS.toArray(new String[]{}),
+        cursor = context.getContentResolver().query(Contract.IngredientContract.URI,
+                Contract.IngredientContract.INGREDIENT_COLUMNS.toArray(new String[]{}),
                 null, null, null);
 
         Binder.restoreCallingIdentity(identityToken);
@@ -63,18 +63,19 @@ public class BakingWidgetData implements RemoteViewsService.RemoteViewsFactory {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.list_item_baking_widget);
         cursor.moveToPosition(i);
 
-        remoteViews.setTextViewText(R.id.textView_recipe,cursor.getString(Contract.RecipeContract.POSITION_RECIPE));
+        remoteViews.setTextViewText(R.id.textView_quantity,cursor.getString(Contract.IngredientContract.POSITION_QUANTITY));
+        remoteViews.setTextViewText(R.id.textView_measure,cursor.getString(Contract.IngredientContract.POSITION_MEASURE));
+        remoteViews.setTextViewText(R.id.textView_ingredient,cursor.getString(Contract.IngredientContract.POSITION_INGREDIENT));
 
+
+        /*
         // set Onclick Item Intent
         Intent onClickItemIntent = new Intent();
-        int recipeColumn = cursor.getColumnIndex(Contract.RecipeContract.COLUMN_RECIPE);
-        int relatedRecipeColumn = cursor.getColumnIndex(Contract.RecipeContract.COLUMN_RELATED_RECIPE);
-        //onClickItemIntent.putExtra(BakingConstants.MAIN_DETAIL_INTENT_KEY,cursor.getString(recipeColumn));
-        onClickItemIntent.putExtra(BakingConstants.MAIN_DETAIL_INTENT_KEY,cursor.getString(relatedRecipeColumn));
-
+        int recipeColumn = cursor.getColumnIndex(Contract.IngredientContract.COLUMN_INGREDIENT);
+        onClickItemIntent.putExtra(BakingConstants.MAIN_DETAIL_INTENT_KEY,cursor.getString(recipeColumn));
 
         remoteViews.setOnClickFillInIntent(R.id.list_item_recipe_row,onClickItemIntent);
-
+        */
 
         return remoteViews;
     }
@@ -92,7 +93,7 @@ public class BakingWidgetData implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public long getItemId(int i) {
         cursor.moveToPosition(i);
-        return cursor.getLong(cursor.getColumnIndex(Contract.RecipeContract._ID));
+        return cursor.getLong(cursor.getColumnIndex(Contract.IngredientContract._ID));
     }
 
     @Override
