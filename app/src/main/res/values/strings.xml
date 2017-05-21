@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BakingApp</string>
+
+    <string name="recipes_list">All Recipes</string>
+    <string name="gradients_list">All Gradients</string>
+    <string name="steps_list">All Steps</string>
+    <string name="recipe_ingredient">Recipe Ingredients</string>
+    <string name="loading_message">Loading...</string>
+    <string name="add_widget_message">Added To Widget !</string>
+
+</resources>
