@@ -45,11 +45,15 @@ public class DetailActivity extends AppCompatActivity implements OnIngredientSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        if(getIntent().getExtras() != null) {
-            String recipeJsonString = getIntent().getExtras().getString(BakingConstants.MAIN_DETAIL_INTENT_KEY);
-            setupRecipeDetailsFragment(recipeJsonString);
+        if(savedInstanceState == null){
 
-            updateActionBarTitle(recipeJsonString);
+            if(getIntent().getExtras() != null) {
+                String recipeJsonString = getIntent().getExtras().getString(BakingConstants.MAIN_DETAIL_INTENT_KEY);
+                setupRecipeDetailsFragment(recipeJsonString);
+
+                updateActionBarTitle(recipeJsonString);
+            }
+
         }
 
         // Call this to determine which layout we are in (tablet or phone)

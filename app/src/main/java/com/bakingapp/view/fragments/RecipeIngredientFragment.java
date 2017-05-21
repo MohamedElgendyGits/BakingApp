@@ -1,6 +1,7 @@
 package com.bakingapp.view.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+
+import static com.bakingapp.application.BakingConstants.BUNDLE_RECYCLER_LAYOUT;
 
 /**
  * Created by Mohamed Elgendy on 18/5/2017.
@@ -47,6 +50,8 @@ public class RecipeIngredientFragment extends Fragment implements RecipeIngredie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String recipeIngredientJsonString = bundle.getString(BakingConstants.DETAIL_INGREDIENT_INTENT_KEY);
@@ -74,5 +79,22 @@ public class RecipeIngredientFragment extends Fragment implements RecipeIngredie
     @Override
     public void onRecipeIngredientClick(int position, View v) {
         // nothing to do
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null)
+        {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            recipeIngredientsRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recipeIngredientsRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 }

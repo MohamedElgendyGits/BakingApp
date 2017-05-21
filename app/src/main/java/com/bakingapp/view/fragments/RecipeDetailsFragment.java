@@ -53,6 +53,8 @@ public class RecipeDetailsFragment extends Fragment implements RecipeStepsListAd
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String recipeJsonString = bundle.getString(BakingConstants.MAIN_DETAIL_INTENT_KEY);

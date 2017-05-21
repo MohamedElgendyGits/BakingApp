@@ -57,6 +57,8 @@ public class RecipeStepFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String recipeStepJsonString = bundle.getString(BakingConstants.DETAIL_STEP_INTENT_KEY);
